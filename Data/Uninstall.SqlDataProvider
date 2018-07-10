@@ -1,0 +1,19 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+if exists (select * from dbo.sysobjects 
+            where id = object_id(N'{databaseOwner}{objectQualifier}EvotivaSearchAndReplace') 
+                and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+    DROP PROCEDURE {databaseOwner}{objectQualifier}EvotivaSearchAndReplace
+GO
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/************************************************************/

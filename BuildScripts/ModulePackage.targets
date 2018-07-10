@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="MSBuild.Community.Tasks.Targets" />
+  <UsingTask TaskName="XmlRead"  AssemblyFile="..\.build\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="Zip"  AssemblyFile="..\.build\MSBuild.Community.Tasks.dll" />
+ 
+
+    <PropertyGroup>
+        <Extension>zip</Extension>
+        <DNNFileName>$(SolutionDir)\Install\Evotiva.DNNSearchAndReplace</DNNFileName>
+        <PackageName>Evotiva.DNNSearchAndReplace</PackageName>
+        <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\Install</MSBuildCommunityTasksPath>
+        <MSBuildCommunityTasksPath>$(SolutionDir)\.build</MSBuildCommunityTasksPath>
+    </PropertyGroup>
+
+    <Target Name="PackageModule" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+
+        <XmlRead Prefix="n"
+                        Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
+                    XPath="dotnetnuke/packages/package[1]/@version"
+                        XmlFileName="$(DNNFileName).dnn">
+            <Output TaskParameter="Value" PropertyName="Version" />
+        </XmlRead>
+
+        <ItemGroup>
+            <DefaultExclude Include="**\.svn\**" />
+            <DefaultExclude Include="**\bin\**" />
+            <DefaultExclude Include="**\obj\**" />
+            <DefaultExclude Include="**\Release\**" />
+            <DefaultExclude Include="**\Debug\**" />
+            <DefaultExclude Include="**\doc\**" />
+            <DefaultExclude Include="**\packages\**" />
+            <DefaultExclude Include="**\www\**" />
+            <DefaultExclude Include="**\*.user" />
+            <DefaultExclude Include="**\*.suo" />
+            <DefaultExclude Include="**\*.zip" />
+            <DefaultExclude Include="**\*.txt" />
+            <DefaultExclude Include="**\_Releases\**" />
+            <DefaultExclude Include="**\_CustomReferences\**" />
+        </ItemGroup>
+
+        <!-- This will be included on the INSTALL Resources.zip file -->
+        <ItemGroup>
+            <InstallInclude Include="**\*.ascx" Exclude="**\_Releases*\**;" />
+            <InstallInclude Include="**\*.asmx" Exclude="**\_Releases*\**;" />
+            <InstallInclude Include="**\*.css"  Exclude="**\_Releases*\**;" />
+            <InstallInclude Include="**\*.html" Exclude="**\_Releases*\**;" />
+            <InstallInclude Include="**\*.htm"  Exclude="**\_Releases*\**;" />
+            <InstallInclude Include="**\*.resx" Exclude="**\_Releases*\**;" />
+            <InstallInclude Include="**\*.js"   Exclude="**\_Releases*\**;" />
+            <InstallInclude Include="**\*.jpg"  Exclude="**\_Releases*\**;" />
+            <InstallInclude Include="**\*.png"  Exclude="**\_Releases*\**;" />
+            <InstallInclude Include="**\*.gif"  Exclude="**\_Releases*\**;" />
+        </ItemGroup>
+
+        <!-- This will be included on the SOURCE Resources.zip file -->
+        <ItemGroup>
+            <SourceInclude Include="**\*.ascx" Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.asmx" Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.css"  Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.html" Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.htm"  Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.resx" Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.js"   Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.jpg"  Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.png"  Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.gif"  Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.cs"   Exclude="**\_Releases\**;**\obj\**;**\packages\**;" />
+            <SourceInclude Include="**\*.cs.designer" Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.csproj"  Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.targets" Exclude="**\_Releases\**;**\obj\**;**\packages\**;"/>
+            <SourceInclude Include="**\*.sln"  Exclude="**\_Releases*\**;" />
+            <SourceInclude Include="**\*.txt"  Exclude="**\obj*\**;**\_ReSharper*\**;**\_Releases*\**;" />
+        </ItemGroup>
+
+        <!-- Define .DNN files to be included -->
+        <CreateItem Include="$(DNNFileName).dnn">
+            <Output TaskParameter="Include" ItemName="PackageManifestFiles" />
+        </CreateItem>
+
+        <!-- Define .sqldataprovider files to be included -->
+        <CreateItem Include="**\*.sqldataprovider" Exclude="**\_Releases*\**;">
+            <Output TaskParameter="Include" ItemName="SqlDataProviderFiles" />
+        </CreateItem>
+
+        <!-- Start with Cleaning up target temp folders -->
+        <RemoveDir Directories ="$(MSBuildProjectDirectory)\_TmpPackage" ContinueOnError="true" />
+        <RemoveDir Directories ="$(MSBuildProjectDirectory)\_TmpResourcesZip" ContinueOnError="true" />
+
+        <!-- Copy DLLs to Target temp folder -->
+        <Copy SourceFiles="$(MSBuildDnnBinPath)\$(AssemblyName).dll" DestinationFolder="$(MSBuildProjectDirectory)\_TmpPackage\bin"/>
+
+        <!-- Copy SqlDataProvider Files to Target temp folder -->
+        <Copy SourceFiles="@(SqlDataProviderFiles)" DestinationFolder="$(MSBuildProjectDirectory)\_TmpPackage\%(RecursiveDir)" />
+
+        <!-- Copy .DNN files to Target temp folder -->
+        <Copy SourceFiles="@(PackageManifestFiles)" DestinationFolder="$(MSBuildProjectDirectory)\_TmpPackage" />
+
+        <!-- create the INSTALL RESOURCES.ZIP file -->
+        <Copy SourceFiles="@(InstallInclude)" DestinationFolder="$(MSBuildProjectDirectory)\_TmpResourcesZip\%(RecursiveDir)" />
+        <CreateItem Include="$(MSBuildProjectDirectory)\_TmpResourcesZip\**\*.*">
+            <Output TaskParameter="Include" ItemName="ResourcesContent" />
+        </CreateItem>
+        <Zip Files="@(ResourcesContent)" WorkingDirectory="$(MSBuildProjectDirectory)\_TmpResourcesZip" ZipFileName="Resources.$(Extension)" />
+
+        <!-- Copy Resources.zip file to Target temp folder -->
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\Resources.$(Extension)" DestinationFolder="_TmpPackage/" />
+
+        <!-- Create the Install package -->
+        <CreateItem Include="$(MSBuildProjectDirectory)\_TmpPackage\**\*.*">
+            <Output TaskParameter="Include" ItemName="OutputContent" />
+        </CreateItem>
+        <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\_TmpPackage" ZipFileName="$(PackageName)_$(Version)_Install.$(Extension)" />
+
+        <!-- Copy the Install package to the Packages folder -->
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)_$(Version)_Install.$(Extension)" DestinationFolder="_Releases/" />
+
+        <!-- Clean Up -->
+        <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)_$(Version)_Install.$(Extension)" />
+        <Delete Files="$(MSBuildProjectDirectory)\Resources.zip" />
+        <RemoveDir Directories ="$(MSBuildProjectDirectory)\_TmpPackage" ContinueOnError="true" />
+        <RemoveDir Directories ="$(MSBuildProjectDirectory)\_TmpResourcesZip" ContinueOnError="true" />
+
+        <!-- Copy DLLs to Target temp folder -->
+        <Copy SourceFiles="$(MSBuildDnnBinPath)\$(AssemblyName).dll" DestinationFolder="$(MSBuildProjectDirectory)\_TmpPackage\bin"/>
+
+        <!-- Copy SqlDataProvider Files to Target temp folder -->
+        <Copy SourceFiles="@(SqlDataProviderFiles)" DestinationFolder="$(MSBuildProjectDirectory)\_TmpPackage\%(RecursiveDir)" />
+
+        <!-- Copy .DNN files to Target temp folder -->
+        <Copy SourceFiles="@(PackageManifestFiles)" DestinationFolder="$(MSBuildProjectDirectory)\_TmpPackage" />
+		
+        <!-- create the SOURCE RESOURCES.ZIP file -->
+        <Copy SourceFiles="@(SourceInclude)" DestinationFolder="$(MSBuildProjectDirectory)\_TmpResourcesZip\%(RecursiveDir)" />
+        <CreateItem Include="$(MSBuildProjectDirectory)\_TmpResourcesZip\**\*.*">
+            <Output TaskParameter="Include" ItemName="SourceContent" />
+        </CreateItem>
+        <Zip Files="@(SourceContent)" WorkingDirectory="$(MSBuildProjectDirectory)\_TmpResourcesZip" ZipFileName="Resources.$(Extension)" />
+
+        <!-- Copy Resources.zip file to Target temp folder -->
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\Resources.$(Extension)" DestinationFolder="_TmpPackage/" />
+
+        <!-- Create the Source package -->
+        <CreateItem Include="$(MSBuildProjectDirectory)\_TmpPackage\**\*.*">
+            <Output TaskParameter="Include" ItemName="OutputSource" />
+        </CreateItem>
+        <Zip Files="@(OutputSource)" WorkingDirectory="$(MSBuildProjectDirectory)\_TmpPackage" ZipFileName="$(PackageName)_$(Version)_Source.$(Extension)" />
+
+        <!-- Copy the Source package to the Packages folder -->
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)_$(Version)_Source.$(Extension)" DestinationFolder="_Releases/" />
+
+        <!-- Clean Up -->
+        <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)_$(Version)_Source.$(Extension)" />
+        <Delete Files="$(MSBuildProjectDirectory)\Resources.zip" />
+        <RemoveDir Directories ="$(MSBuildProjectDirectory)\_TmpPackage" ContinueOnError="true" />
+        <RemoveDir Directories ="$(MSBuildProjectDirectory)\_TmpResourcesZip" ContinueOnError="true" />
+
+    </Target>
+
+</Project>

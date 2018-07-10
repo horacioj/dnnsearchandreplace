@@ -1,0 +1,18 @@
+
+div.evFixedSizeComboBox {
+    width: 500px !important;
+    margin-right: 15px;
+    float: left;
+}
+
+.evComboBoxHeader  
+{
+    font-weight: bold;
+}
+
+.RadGrid .rgFilter
+{
+    border-color: inherit !important;
+    border-style: dotted !important;
+    border-width: 1px !important;
+}
