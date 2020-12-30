@@ -32,56 +32,17 @@ DAMAGE.
 */
 #endregion
 
-namespace Evotiva.DNNSearchAndReplace.Components
+using System.Collections.Generic;
+using Evotiva.DNNSearchAndReplace.Components;
+
+namespace Evotiva.DNNSearchAndReplace.Services.ViewModels
 {
-    public class SearchItem
+    public class PerformActiomSettingsViewModel
     {
-        #region Private Member
-
-        private const string Separator = "!";
-        private const string Indicator = " -> ";
-
-        #endregion
-
-        #region Constructors
-
-        public SearchItem()
-        {
-        }
-
-        public SearchItem(string table, string column)
-        {
-            TableName = table;
-            ColumnName = column;
-        }
-
-        #endregion
-
-        #region Properties
-
-        public string TableName { get; set; }
-
-        public string ColumnName { get; set; }
-
-        public string ColumnType { get; set; }
-
-        public string ColumnLenght { get; set; }
-
-        public string Id => TableName + Separator + ColumnName;
-
-        public string Description => TableName + Indicator + ColumnName;
-
-        public static string GetTableNameFromId(string id)
-        {
-            return id.Split(Separator.ToCharArray())[0];
-        }
-
-        public static string GetColumnNameFromId(string id)
-        {
-            return id.Split(Separator.ToCharArray())[1];
-        }
-
-        #endregion
-
+        public IEnumerable<SearchItem> SearchTargets { get; set; }
+        public string SearchText { get; set; }
+        public string ReplaceText { get; set; }
+        public bool HtmlEncode { get; set; }
+        public bool DoReplace { get; set; }
     }
 }

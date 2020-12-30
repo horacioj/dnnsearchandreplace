@@ -32,56 +32,28 @@ DAMAGE.
 */
 #endregion
 
+using System;
+
 namespace Evotiva.DNNSearchAndReplace.Components
 {
-    public class SearchItem
+    [Serializable]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3925:\"ISerializable\" should be implemented correctly", Justification = "Not for now, but thanks anyway.")]
+    public class DnnSearchAndReplaceException : Exception
     {
-        #region Private Member
-
-        private const string Separator = "!";
-        private const string Indicator = " -> ";
-
-        #endregion
-
-        #region Constructors
-
-        public SearchItem()
+        public DnnSearchAndReplaceException()
         {
         }
 
-        public SearchItem(string table, string column)
+        public DnnSearchAndReplaceException(string message) : base(message)
         {
-            TableName = table;
-            ColumnName = column;
         }
 
-        #endregion
-
-        #region Properties
-
-        public string TableName { get; set; }
-
-        public string ColumnName { get; set; }
-
-        public string ColumnType { get; set; }
-
-        public string ColumnLenght { get; set; }
-
-        public string Id => TableName + Separator + ColumnName;
-
-        public string Description => TableName + Indicator + ColumnName;
-
-        public static string GetTableNameFromId(string id)
+        public DnnSearchAndReplaceException(string message, Exception innerException) : base(message, innerException)
         {
-            return id.Split(Separator.ToCharArray())[0];
         }
 
-        public static string GetColumnNameFromId(string id)
+        protected DnnSearchAndReplaceException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
         {
-            return id.Split(Separator.ToCharArray())[1];
         }
-
-        #endregion
-
     }
 }

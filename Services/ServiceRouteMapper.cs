@@ -32,56 +32,20 @@ DAMAGE.
 */
 #endregion
 
-namespace Evotiva.DNNSearchAndReplace.Components
+using DotNetNuke.Web.Api;
+
+namespace Evotiva.DNNSearchAndReplace.Services
 {
-    public class SearchItem
+    public class ServiceRouteMapper : IServiceRouteMapper
     {
-        #region Private Member
-
-        private const string Separator = "!";
-        private const string Indicator = " -> ";
-
-        #endregion
-
-        #region Constructors
-
-        public SearchItem()
+        public void RegisterRoutes(IMapRoute mapRouteManager)
         {
+            mapRouteManager.MapHttpRoute(
+                moduleFolderName: "Evotiva.DNNSearchAndReplace",
+                routeName: "default",
+                url: "{controller}/{action}",
+                namespaces: new[] { "Evotiva.DNNSearchAndReplace.Services.Controllers" });
         }
-
-        public SearchItem(string table, string column)
-        {
-            TableName = table;
-            ColumnName = column;
-        }
-
-        #endregion
-
-        #region Properties
-
-        public string TableName { get; set; }
-
-        public string ColumnName { get; set; }
-
-        public string ColumnType { get; set; }
-
-        public string ColumnLenght { get; set; }
-
-        public string Id => TableName + Separator + ColumnName;
-
-        public string Description => TableName + Indicator + ColumnName;
-
-        public static string GetTableNameFromId(string id)
-        {
-            return id.Split(Separator.ToCharArray())[0];
-        }
-
-        public static string GetColumnNameFromId(string id)
-        {
-            return id.Split(Separator.ToCharArray())[1];
-        }
-
-        #endregion
-
     }
 }
+

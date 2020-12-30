@@ -32,56 +32,24 @@ DAMAGE.
 */
 #endregion
 
-namespace Evotiva.DNNSearchAndReplace.Components
+namespace Evotiva.DNNSearchAndReplace.Services.ViewModels
 {
-    public class SearchItem
+    public class OperationResult
     {
-        #region Private Member
-
-        private const string Separator = "!";
-        private const string Indicator = " -> ";
-
-        #endregion
-
-        #region Constructors
-
-        public SearchItem()
-        {
-        }
-
-        public SearchItem(string table, string column)
+        public OperationResult(string table, string column, string columnsList, string results, long count)
         {
             TableName = table;
             ColumnName = column;
+            ColumnsList = columnsList;
+            Results = results;
+            Count = count;
         }
 
-        #endregion
-
-        #region Properties
-
+        public string Id => TableName + ColumnName;
         public string TableName { get; set; }
-
         public string ColumnName { get; set; }
-
-        public string ColumnType { get; set; }
-
-        public string ColumnLenght { get; set; }
-
-        public string Id => TableName + Separator + ColumnName;
-
-        public string Description => TableName + Indicator + ColumnName;
-
-        public static string GetTableNameFromId(string id)
-        {
-            return id.Split(Separator.ToCharArray())[0];
-        }
-
-        public static string GetColumnNameFromId(string id)
-        {
-            return id.Split(Separator.ToCharArray())[1];
-        }
-
-        #endregion
-
+        public string ColumnsList { get; set; }
+        public string Results { get; set; }
+        public long Count { get; set; }
     }
 }

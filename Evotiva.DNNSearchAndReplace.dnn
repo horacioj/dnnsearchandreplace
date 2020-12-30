@@ -1,0 +1,68 @@
+<dotnetnuke type="Package" version="5.0">
+    <packages>
+        <package name="Evotiva.DNNSearchAndReplace" type="PersonaBar" version="04.00.00">
+            <friendlyName>Evotiva DNN Search and Replace</friendlyName>
+            <description>Evotiva.DNNSearchAndReplace is a DNN Search and Replace DNN Persona Bar extension.</description>
+            <iconFile>~/DesktopModules/Admin/Dnn.PersonaBar/Modules/Evotiva.DNNSearchAndReplace/images/Evotiva.DNNSearchAndReplace_32X32.png</iconFile>
+		  <owner>
+			<name>Horacio Judeikin</name>
+			<organization>Evotiva</organization>
+			<url>www.evotiva.com</url>
+			<email>support@evotiva.com</email>
+		  </owner>
+            <license src="License.txt"></license>
+            <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
+            <dependencies>
+                <dependency type="CoreVersion">09.08.00</dependency>
+                <dependency type="ManagedPackage" version="01.00.00">Dnn.PersonaBar.UI</dependency>
+            </dependencies>
+            <azureCompatible>true</azureCompatible>			
+            <components>
+			
+                <component type="ResourceFile">
+                    <resourceFiles>
+                        <basePath>DesktopModules/Admin/Dnn.PersonaBar/Modules/Evotiva.DNNSearchAndReplace</basePath>
+                        <resourceFile>
+                            <name>Resources.zip</name>
+                        </resourceFile>
+                    </resourceFiles>
+                </component>
+				
+                <component type="Assembly">
+                    <assemblies>
+                        <assembly>
+                            <name>Evotiva.DNNSearchAndReplace.dll</name>
+                            <path>bin</path>
+                        </assembly>
+                    </assemblies>
+                </component>
+              
+                <component type="Script">
+                  <scripts>
+                    <basePath>DesktopModules/Admin/Dnn.PersonaBar/Modules/Evotiva.DNNSearchAndReplace</basePath>
+                    <script type="UnInstall">
+                      <path>SqlDataProvider</path>
+                      <name>Uninstall.SqlDataProvider</name>
+                      <version>04.00.00</version>
+                    </script>
+                  </scripts>
+                </component>              
+				
+                <component type="PersonaBarMenu">
+                    <menu>
+                        <identifier>Evotiva.DNNSearchAndReplace</identifier>
+                        <moduleName>DNNSearchAndReplace</moduleName>
+                        <controller>Evotiva.DNNSearchAndReplace.Services.SearchController, Evotiva.DNNSearchAndReplace</controller>
+                        <resourceKey>nav_DNNSearchAndReplace</resourceKey>
+                        <path>DNNSearchAndReplace</path>
+                        <mobileSupport>true</mobileSupport>
+                        <parent>Settings</parent>
+                        <order>1</order>
+                        <defaultPermissions>Administrators</defaultPermissions>
+                    </menu>
+                </component>
+				
+            </components>
+        </package>
+    </packages>
+</dotnetnuke>

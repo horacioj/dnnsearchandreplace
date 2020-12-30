@@ -1,0 +1,18 @@
+﻿<h3>Evotiva DNNSearchAndReplace</h3>
+<p class="Contributor">
+	Horacio Judeikin <br />
+	<a href="mailto:support@evotiva.com">support@evotiva.com</a><br />
+	<a href=https://www.evotiva.com/>https://www.evotiva.com/</a><br />
+</p>
+<br />
+<hr/>
+<p class="Contributor">
+	<font color="red">Before installing this extension, please uninstall any version of DNNSearchAndReplace previous to version 4.0.0.</font>
+</p>
+<hr/>
+<br />
+<div class="License">
+	<h3>About Evotiva DNN Search and Replace</h3>
+	<br /><br />
+	<p>Please review the <a target="_blank" href="https://www.evotiva.com/products/dnn-search-and-replace">DNN Search and Replace Release Notes</a> (opens in new window)</p>	
+</div>

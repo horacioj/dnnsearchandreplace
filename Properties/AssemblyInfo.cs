@@ -32,56 +32,20 @@ DAMAGE.
 */
 #endregion
 
-namespace Evotiva.DNNSearchAndReplace.Components
-{
-    public class SearchItem
-    {
-        #region Private Member
+using System;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
-        private const string Separator = "!";
-        private const string Indicator = " -> ";
+[assembly: AssemblyTitle("Evotiva.DNNSearchAndReplace")]
+[assembly: AssemblyDescription("Search And Replace within any DNN site's table.")]
+[assembly: AssemblyCompany("Evotiva (https://www.evotiva.com)")]
+[assembly: AssemblyProduct("Evotiva DNNSearchAndReplace DNN Module")]
+[assembly: AssemblyCopyright("Copyright © 2013-Present, Evotiva")]
+[assembly: AssemblyTrademark("Horacio Judeikin")]
+[assembly: AssemblyVersion("04.00.00.*")]
+[assembly: AssemblyFileVersion("04.00.00")]
 
-        #endregion
-
-        #region Constructors
-
-        public SearchItem()
-        {
-        }
-
-        public SearchItem(string table, string column)
-        {
-            TableName = table;
-            ColumnName = column;
-        }
-
-        #endregion
-
-        #region Properties
-
-        public string TableName { get; set; }
-
-        public string ColumnName { get; set; }
-
-        public string ColumnType { get; set; }
-
-        public string ColumnLenght { get; set; }
-
-        public string Id => TableName + Separator + ColumnName;
-
-        public string Description => TableName + Indicator + ColumnName;
-
-        public static string GetTableNameFromId(string id)
-        {
-            return id.Split(Separator.ToCharArray())[0];
-        }
-
-        public static string GetColumnNameFromId(string id)
-        {
-            return id.Split(Separator.ToCharArray())[1];
-        }
-
-        #endregion
-
-    }
-}
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCulture("")]
+[assembly: ComVisible(false)]
+[assembly: CLSCompliant(true)]
